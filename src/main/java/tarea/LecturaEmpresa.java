@@ -96,7 +96,7 @@ public class LecturaEmpresa {
         ArrayList<POJO> lista = new ArrayList<>();
 
         //No uso UTF-8 debido a que da error datosFichero.nextLine()
-        try ( Scanner datosFichero = new Scanner(new File(idFichero))) {
+        try ( Scanner datosFichero = new Scanner(new File(idFichero), "ISO-8859-1")) {
             datosFichero.nextLine();
             while (datosFichero.hasNextLine()) {
 
