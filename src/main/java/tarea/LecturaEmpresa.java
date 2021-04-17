@@ -102,7 +102,7 @@ public class LecturaEmpresa {
                 tokens = linea.split(",");
                 POJO prueba1 = new POJO();
 
-                //Quita comillas
+                //Quita comillas(Empleado no lo separo de nombre y apellidos ya que no lo especifica)
                 prueba1.setEmpleado(comilla(tokens[0] + tokens[1]));
                 prueba1.setDni(comilla(tokens[2]));
                 prueba1.setPuesto(comilla(tokens[3]));
