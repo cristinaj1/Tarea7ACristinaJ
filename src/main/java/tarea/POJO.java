@@ -22,21 +22,6 @@ public class POJO {
     private boolean evaluador;
     private boolean coordinador;
 
-    public POJO() {
-    }
-
-    
-    public POJO(String empleado, String dni, String puesto, String telefono, LocalDate fInicio, LocalDate fFin, boolean evaluador, boolean coordinador) {
-        this.empleado = empleado;
-        this.dni = dni;
-        this.puesto = puesto;
-        this.telefono = telefono;
-        this.fInicio = fInicio;
-        this.fFin = fFin;
-        this.evaluador = evaluador;
-        this.coordinador = coordinador;
-    }
-
     public String getEmpleado() {
         return empleado;
     }
