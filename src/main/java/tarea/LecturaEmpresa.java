@@ -59,7 +59,10 @@ public class LecturaEmpresa {
         String idFichero2 = "TrabajadoresAntiguos.csv";
 
         try ( BufferedWriter flujo = new BufferedWriter(new FileWriter(idFichero2))) {
+            flujo.write("Empleado/a,DNI/Pasaporte,Puesto,Fecha de toma de posesión,Fecha de cese,Teléfono,Evaluador,Coordinador");
+            flujo.newLine();
             for (int i = 0; i < empleados.size(); i++) {
+
                 flujo.write(empleados.get(i).getEmpleado() + ",");
                 flujo.write(empleados.get(i).getDni() + ",");
                 flujo.write(empleados.get(i).getPuesto() + ",");
@@ -116,17 +119,23 @@ public class LecturaEmpresa {
                 if (tokens[6].length() > 0) {
                     prueba1.setTelefono(comilla(tokens[6]));
                 }
-                if (comilla(tokens[7]).equalsIgnoreCase("si")) {
-                    prueba1.setEvaluador(true);
-                } else {
+
+                //Funciona con el no pero no funciona con el sí(Preguntar)
+                if (comilla(tokens[7]).equalsIgnoreCase("no")) {
                     prueba1.setEvaluador(false);
-                }
-                if (comilla(tokens[8]).equalsIgnoreCase("si")) {
-                    prueba1.setCoordinador(true);
                 } else {
+                    prueba1.setEvaluador(true);
+                }
+                if (comilla(tokens[8]).equalsIgnoreCase("no")) {
                     prueba1.setCoordinador(false);
+                } else {
+                    prueba1.setCoordinador(true);
                 }
                 lista.add(prueba1);
+
+            }
+            for (POJO a : lista) {
+                System.out.println(a);
             }
         }
         escribirFichero(lista);
