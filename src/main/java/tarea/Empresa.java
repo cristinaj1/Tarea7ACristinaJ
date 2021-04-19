@@ -11,9 +11,11 @@ import java.time.LocalDate;
  *
  * @author Cris
  */
-public class POJO {
+public class Empresa {
 
     private String empleado;
+    private String nombre;
+    private String apellidos;
     private String dni;
     private String puesto;
     private String telefono;
@@ -21,6 +23,7 @@ public class POJO {
     private LocalDate fFin;
     private boolean evaluador;
     private boolean coordinador;
+    
 
     public String getEmpleado() {
         return empleado;
@@ -84,6 +87,22 @@ public class POJO {
 
     public void setCoordinador(boolean coordinador) {
         this.coordinador = coordinador;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
     }
 
     @Override

@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 /**
@@ -29,8 +30,8 @@ public class LecturaEmpresa {
     }
 
     //Guarda a los empleados que llevan más de 20 años en una lista de objetos
-    private static ArrayList<POJO> empleados(ArrayList<POJO> lista) {
-        ArrayList<POJO> empleadosAntiguos = new ArrayList<>();
+    private static ArrayList<Empresa> empleados(ArrayList<Empresa> lista) {
+        ArrayList<Empresa> empleadosAntiguos = new ArrayList<>();
         LocalDate actual = LocalDate.now();
 
         //Para que mire la lista de empleados completa
@@ -39,12 +40,8 @@ public class LecturaEmpresa {
             LocalDate fechaFin = lista.get(i).getfFin();
 
             //para añadir en una lista a los antiguos
-            if (fechaInicio == null) {
-                long antiguedad = ChronoUnit.YEARS.between(fechaInicio, fechaFin);
-                if (antiguedad > 20) {
-                    empleadosAntiguos.add(lista.get(i));
-                }
-            } else {
+            if (fechaFin == null) {
+                //POner el código que ha puesto Vico
                 long antiguedad2 = ChronoUnit.YEARS.between(fechaInicio, actual);
                 if (antiguedad2 > 20) {
                     empleadosAntiguos.add(lista.get(i));
@@ -54,12 +51,15 @@ public class LecturaEmpresa {
         return empleadosAntiguos;
     }
 
-    private static void escribirFichero(ArrayList<POJO> lista) {
-        ArrayList<POJO> empleados = new ArrayList<>(empleados(lista));
+    private static void escribirFichero(ArrayList<Empresa> lista) {
+        ArrayList<Empresa> empleados = new ArrayList<>(empleados(lista));
         String idFichero2 = "TrabajadoresAntiguos.csv";
 
         try ( BufferedWriter flujo = new BufferedWriter(new FileWriter(idFichero2))) {
+            flujo.write("Nombre,Apellidos,DNI/Pasaporte,Puesto,Fecha de toma de posesión,Fecha de cese,Teléfono,Evaluador,Coordinador");
+            flujo.newLine();
             for (int i = 0; i < empleados.size(); i++) {
+
                 flujo.write(empleados.get(i).getEmpleado() + ",");
                 flujo.write(empleados.get(i).getDni() + ",");
                 flujo.write(empleados.get(i).getPuesto() + ",");
@@ -93,17 +93,21 @@ public class LecturaEmpresa {
         String idFichero = "RelPerCen.csv";
         String[] tokens;
         String linea;
-        ArrayList<POJO> lista = new ArrayList<>();
+        ArrayList<Empresa> lista = new ArrayList<>();
+        int contador = 0;
+        int contador2 = 0;
+        ArrayList<String> listaDni = new ArrayList<>();
 
         try ( Scanner datosFichero = new Scanner(new File(idFichero), "ISO-8859-1")) {
             datosFichero.nextLine();
             while (datosFichero.hasNextLine()) {
                 linea = datosFichero.nextLine();
                 tokens = linea.split(",");
-                POJO prueba1 = new POJO();
+                Empresa prueba1 = new Empresa();
 
                 //Quita comillas(Empleado no lo separo de nombre y apellidos ya que no lo especifica)
                 prueba1.setEmpleado(comilla(tokens[0] + tokens[1]));
+                prueba1.setNombre(tokens[1]);
                 prueba1.setDni(comilla(tokens[2]));
                 prueba1.setPuesto(comilla(tokens[3]));
                 String inicio = comilla(tokens[4]);
@@ -116,18 +120,49 @@ public class LecturaEmpresa {
                 if (tokens[6].length() > 0) {
                     prueba1.setTelefono(comilla(tokens[6]));
                 }
-                if (comilla(tokens[7]).equalsIgnoreCase("si")) {
-                    prueba1.setEvaluador(true);
-                } else {
+
+                //Funciona con el no pero no funciona con el sí(Preguntar)
+                if (comilla(tokens[7]).equalsIgnoreCase("no")) {
                     prueba1.setEvaluador(false);
-                }
-                if (comilla(tokens[8]).equalsIgnoreCase("si")) {
-                    prueba1.setCoordinador(true);
                 } else {
+                    prueba1.setEvaluador(true);
+                }
+                if (comilla(tokens[8]).equalsIgnoreCase("no")) {
                     prueba1.setCoordinador(false);
+                } else {
+                    prueba1.setCoordinador(true);
                 }
                 lista.add(prueba1);
+                if (prueba1.getPuesto().equalsIgnoreCase("Informática P.E.S.")) {
+                    contador++;
+                }
+                if (prueba1.getPuesto().equalsIgnoreCase("Biología y Geología P.E.S.")) {
+                    if (prueba1.isCoordinador() == true) {
+                        System.out.println("----------El profesor que es coordinador y de Bilogía es: " + prueba1);
+                    }
+                }
+                if (prueba1.getDni().contains("N")) {
+                    listaDni.add(prueba1.getEmpleado() + "\t" + prueba1.getDni());
+                }
+
             }
+            for (Empresa a : lista) {
+                System.out.println(a);
+            }
+            //Los Dni que contiene N organizados alfabéticamente
+            System.out.println("Organizados alfabéticamente");
+            Collections.sort(listaDni);
+            for (String z : listaDni) {
+                System.out.println(z);
+            }
+            //Profesores de informática
+            System.out.println("Los profesores de informática son: " + contador);
+            for (int i = 0; i < lista.size(); i++) {
+                if (lista.get(i).getEmpleado().contains("Jonh")) {
+                    contador2++;
+                }
+            }
+            System.out.println("Las personas que tienen John en su nombre son: " + contador2);
         }
         escribirFichero(lista);
     }
