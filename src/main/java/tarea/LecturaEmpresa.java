@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -56,7 +57,7 @@ public class LecturaEmpresa {
         String idFichero2 = "TrabajadoresAntiguos.csv";
 
         try ( BufferedWriter flujo = new BufferedWriter(new FileWriter(idFichero2))) {
-            flujo.write("Nombre,Apellidos,DNI/Pasaporte,Puesto,Fecha de toma de posesión,Fecha de cese,Teléfono,Evaluador,Coordinador");
+            flujo.write("Empleado/a,DNI/Pasaporte,Puesto,Fecha de toma de posesión,Fecha de cese,Teléfono,Evaluador,Coordinador");
             flujo.newLine();
             for (int i = 0; i < empleados.size(); i++) {
 
@@ -162,7 +163,52 @@ public class LecturaEmpresa {
                     contador2++;
                 }
             }
+            for (Empresa a : lista) {
+                System.out.println(a);
+            }
             System.out.println("Las personas que tienen John en su nombre son: " + contador2);
+//            System.out.println("------------------PUNTO 1-----------------");
+//            System.out.println();
+//
+//            //Preguntar a Vico mañana todo
+//            
+////      PUNTO 2:
+////      Saber si algún profesor/a de Biología es también coordinador. CON API
+//            System.out.println();
+//            System.out.println("------------------PUNTO 2-----------------");
+//            System.out.println();
+//            List<Empresa> lBioCoord = buscarProfesoresBioCoord(lista);
+//            System.out.println("Hay " + lBioCoord.size() + " profesores de biologia que son coordinadores");
+//            lBioCoord.forEach(trabajador -> {
+//                System.out.println(trabajador.toString());
+//            });
+//
+////      PUNTO 3:
+////      Obtener una lista ordenada alfabéticamente con todos los apellidos de 
+////      los empleados cuyo NIF contenga la letra N. CON API
+//            System.out.println();
+//            System.out.println("------------------PUNTO 3-----------------");
+//            System.out.println();
+//
+//            List<Empresa> listaDNIN = buscarN(lista);
+//            listaDNIN.forEach(trabajador -> {
+//                System.out.println(trabajador.getApellidos() + "," + trabajador.getNombre()
+//                        + "\t" + prueba1.getDni());
+//            });
+//
+////      PUNTO 4:
+////      Verificar que ningún profesor se llama "Jonh". CON API
+//            System.out.println();
+//            System.out.println("------------------PUNTO 4-----------------");
+//            System.out.println();
+//
+//            Jonh = buscarJonh(Empresa);
+//
+//            if (Jonh) {
+//                System.out.println("Si hay alguien que se llama Jonh");
+//            } else {
+//                System.out.println("No hay nadie que se llama Jonh");
+//            }
         }
         escribirFichero(lista);
     }

@@ -1,4 +1,4 @@
-Nombre,Apellidos,DNI/Pasaporte,Puesto,Fecha de toma de posesión,Fecha de cese,Teléfono,Evaluador,Coordinador
+Empleado/a,DNI/Pasaporte,Puesto,Fecha de toma de posesión,Fecha de cese,Teléfono,Evaluador,Coordinador
 Báez Ruiz Concepción,22723547F,Administración de Empresas P.E.S.,01/10/1991,sin datos,sin datos,true,false,
 Carrillo Moreno Carmen Isabel,75006921B,Administración de Empresas P.E.S.,01/10/1992,sin datos,692176980,true,false,
 Girón Vega María Dolores,29077348N,Administración de Empresas P.E.S.,01/10/1992,sin datos,952794470,true,false,
