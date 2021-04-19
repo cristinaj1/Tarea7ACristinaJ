@@ -17,12 +17,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author Cris
  */
 public class LecturaEmpresa {
+
+    private static ArrayList<Empresa> lista = new ArrayList<>();
 
     //Quita las comillas del principio y del final 
     private static String comilla(String s) {
@@ -89,12 +92,46 @@ public class LecturaEmpresa {
         }
     }
 
+    private static List<Empresa> buscarInformaticos(ArrayList<Empresa> listita) {
+        List<Empresa> listaInformaticos = listita.stream()
+                .filter(empleado -> empleado.getPuesto().equalsIgnoreCase("Informática P.E.S."))
+                .collect(Collectors.toList());
+
+        return listaInformaticos;
+    }
+
+    private static List<Empresa> buscarBioCoord(ArrayList<Empresa> listita) {
+        List<Empresa> biologosCoordinadores = listita.stream()
+                .filter(empleado -> empleado.getPuesto().equalsIgnoreCase("Biología y Geología P.E.S.") && empleado.isCoordinador())
+                .collect(Collectors.toList());
+
+        return biologosCoordinadores;
+
+    }
+
+    private static List<Empresa> buscarNEnDni(ArrayList<Empresa> listaEmpleados) {
+        List<Empresa> EmpleadosConN = listaEmpleados.stream()
+                .filter(empleado -> empleado.getDni().contains("N"))
+                .sorted((e1, e2) -> e1.getEmpleado().compareTo(e2.getEmpleado()))
+                .collect(Collectors.toList());
+
+        return EmpleadosConN;
+    }
+
+    private static boolean buscarJonh(ArrayList<Empresa> listaEmpleados) {
+        List<Empresa> Jonh = listaEmpleados.stream()
+                .filter(empleado -> empleado.getNombre().equals("Jonh"))
+                .collect(Collectors.toList());
+
+        return !Jonh.isEmpty();
+    }
+
     public static void main(String[] args) throws FileNotFoundException {
 
         String idFichero = "RelPerCen.csv";
         String[] tokens;
         String linea;
-        ArrayList<Empresa> lista = new ArrayList<>();
+
         int contador = 0;
         int contador2 = 0;
         ArrayList<String> listaDni = new ArrayList<>();
@@ -158,6 +195,7 @@ public class LecturaEmpresa {
             }
             //Profesores de informática
             System.out.println("Los profesores de informática son: " + contador);
+            //Los que se llaman John
             for (int i = 0; i < lista.size(); i++) {
                 if (lista.get(i).getEmpleado().contains("Jonh")) {
                     contador2++;
@@ -167,48 +205,42 @@ public class LecturaEmpresa {
                 System.out.println(a);
             }
             System.out.println("Las personas que tienen John en su nombre son: " + contador2);
-//            System.out.println("------------------PUNTO 1-----------------");
-//            System.out.println();
-//
-//            //Preguntar a Vico mañana todo
-//            
-////      PUNTO 2:
-////      Saber si algún profesor/a de Biología es también coordinador. CON API
-//            System.out.println();
-//            System.out.println("------------------PUNTO 2-----------------");
-//            System.out.println();
-//            List<Empresa> lBioCoord = buscarProfesoresBioCoord(lista);
-//            System.out.println("Hay " + lBioCoord.size() + " profesores de biologia que son coordinadores");
-//            lBioCoord.forEach(trabajador -> {
-//                System.out.println(trabajador.toString());
-//            });
-//
-////      PUNTO 3:
-////      Obtener una lista ordenada alfabéticamente con todos los apellidos de 
-////      los empleados cuyo NIF contenga la letra N. CON API
-//            System.out.println();
-//            System.out.println("------------------PUNTO 3-----------------");
-//            System.out.println();
-//
-//            List<Empresa> listaDNIN = buscarN(lista);
-//            listaDNIN.forEach(trabajador -> {
-//                System.out.println(trabajador.getApellidos() + "," + trabajador.getNombre()
-//                        + "\t" + prueba1.getDni());
-//            });
-//
-////      PUNTO 4:
-////      Verificar que ningún profesor se llama "Jonh". CON API
-//            System.out.println();
-//            System.out.println("------------------PUNTO 4-----------------");
-//            System.out.println();
-//
-//            Jonh = buscarJonh(Empresa);
-//
-//            if (Jonh) {
-//                System.out.println("Si hay alguien que se llama Jonh");
-//            } else {
-//                System.out.println("No hay nadie que se llama Jonh");
-//            }
+            System.out.println("---------------CON LA API-------------");
+            System.out.println();
+            //Busca los que den informática
+            List<Empresa> listaInformatica = buscarInformaticos(lista);
+            System.out.println("Los profesores de informática son: " + listaInformatica.size());
+            listaInformatica.forEach(trabajador -> {
+                System.out.println(trabajador.toString());
+            });
+
+            System.out.println();
+            //Busca a los de Biología y que sean coordenadores
+            List<Empresa> profeBio = buscarBioCoord(lista);
+            System.out.println("Los profesores de Biología y Coordinadores son: " + profeBio.size());
+            profeBio.forEach(trabajador -> {
+                System.out.println(trabajador.toString());
+            });
+
+            System.out.println();
+            System.out.println("----------------Los empleados con N en su DNI son: ");
+            //los que tienen la N en su DNI
+            List<Empresa> listaDniConN = buscarNEnDni(lista);
+            listaDniConN.forEach(trabajador -> {
+                System.out.println(trabajador.getEmpleado()
+                        + "\t" + trabajador.getDni());
+            });
+
+            System.out.println();
+            //Los que se llaman John
+            Boolean personaJonh = buscarJonh(lista);
+            if (!personaJonh) {
+                System.out.println("Nadie de la lista tiene de nombre John");
+            } else {
+                System.out.println("Hay 1 o más personas con el nombre de John");
+
+            }
+
         }
         escribirFichero(lista);
     }
