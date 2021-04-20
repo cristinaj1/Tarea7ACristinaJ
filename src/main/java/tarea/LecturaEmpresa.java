@@ -92,27 +92,32 @@ public class LecturaEmpresa {
         }
     }
 
-    private static List<Empresa> buscarInformaticos(ArrayList<Empresa> listita) {
-        List<Empresa> listaInformaticos = listita.stream()
-                .filter(empleado -> empleado.getPuesto().equalsIgnoreCase("Informática P.E.S."))
-                .collect(Collectors.toList());
+    private static void buscarInformaticos(ArrayList<Empresa> listita) {
+        String profesor = "Informática P.E.S.";
+        long cuenta = listita.stream()
+                .filter(empleado -> empleado.getPuesto().contains(profesor))//El Stream queda solo con los profesores que cumplan el requisito
+                //Preguntar  por qué map y no collection
+                //.collect(Collectors.toList());
+                .count();
 
-        return listaInformaticos;
+        System.out.println("Los profesores de informatica que hay son. " + cuenta);
     }
 
-    private static List<Empresa> buscarBioCoord(ArrayList<Empresa> listita) {
-        List<Empresa> biologosCoordinadores = listita.stream()
-                .filter(empleado -> empleado.getPuesto().equalsIgnoreCase("Biología y Geología P.E.S.") && empleado.isCoordinador())
-                .collect(Collectors.toList());
+    private static void buscarBioCoord(ArrayList<Empresa> listita) {
+        long lista2 = listita.stream()
+                .filter(empleado -> empleado.getPuesto().equalsIgnoreCase("Biología y Geología P.E.S."))//El stream solo contiene a los de Biología
+                .filter(empleado -> empleado.isCoordinador())//Contiene los de bilogía y coordinadores
+                .count();
 
-        return biologosCoordinadores;
+        System.out.println("Hay " + lista2 + " profesores biologos y coordinadores");
 
     }
 
-    private static List<Empresa> buscarNEnDni(ArrayList<Empresa> listaEmpleados) {
-        List<Empresa> EmpleadosConN = listaEmpleados.stream()
+    private static List buscarNEnDni(ArrayList<Empresa> listaEmpleados) {
+        List<String> EmpleadosConN = listaEmpleados.stream()
                 .filter(empleado -> empleado.getDni().contains("N"))
-                .sorted((e1, e2) -> e1.getEmpleado().compareTo(e2.getEmpleado()))
+                .map(empleado -> empleado.getEmpleado())
+                .sorted()
                 .collect(Collectors.toList());
 
         return EmpleadosConN;
@@ -122,8 +127,25 @@ public class LecturaEmpresa {
         List<Empresa> Jonh = listaEmpleados.stream()
                 .filter(empleado -> empleado.getNombre().equals("Jonh"))
                 .collect(Collectors.toList());
-
+        //listaEmpleados.stream().noneMatch();
         return !Jonh.isEmpty();
+    }
+
+    //Lista de TODAS las fecha de cese que hay en los POJOS
+    public static List<LocalDate> fechas(ArrayList<Empresa> lista) {
+        List<LocalDate> fecha = lista.stream()
+                .map(p -> p.getfFin())
+                .filter(p -> p != null)//todos los que no sean null
+                .collect(Collectors.toList());
+        return fecha;
+    }
+
+    private static List<String> jubilados(ArrayList<Empresa> lista, LocalDate fechaJ) {
+        List<String> listita = lista.stream()
+                .filter(p -> p.getfFin().equals(fechaJ))
+                .map(p -> p.getEmpleado())
+                .collect(Collectors.toList());
+        return listita;
     }
 
     public static void main(String[] args) throws FileNotFoundException {
@@ -208,19 +230,9 @@ public class LecturaEmpresa {
             System.out.println("---------------CON LA API-------------");
             System.out.println();
             //Busca los que den informática
-            List<Empresa> listaInformatica = buscarInformaticos(lista);
-            System.out.println("Los profesores de informática son: " + listaInformatica.size());
-            listaInformatica.forEach(trabajador -> {
-                System.out.println(trabajador.toString());
-            });
-
-            System.out.println();
-            //Busca a los de Biología y que sean coordenadores
-            List<Empresa> profeBio = buscarBioCoord(lista);
-            System.out.println("Los profesores de Biología y Coordinadores son: " + profeBio.size());
-            profeBio.forEach(trabajador -> {
-                System.out.println(trabajador.toString());
-            });
+            buscarInformaticos(lista);
+            //Buscar biológos y coordinadores
+            buscarBioCoord(lista);
 
             System.out.println();
             System.out.println("----------------Los empleados con N en su DNI son: ");
