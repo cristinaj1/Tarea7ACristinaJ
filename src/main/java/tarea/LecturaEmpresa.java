@@ -233,16 +233,9 @@ public class LecturaEmpresa {
             buscarInformaticos(lista);
             //Buscar biológos y coordinadores
             buscarBioCoord(lista);
-
-            System.out.println();
-            System.out.println("----------------Los empleados con N en su DNI son: ");
-            //los que tienen la N en su DNI
-            List<Empresa> listaDniConN = buscarNEnDni(lista);
-            listaDniConN.forEach(trabajador -> {
-                System.out.println(trabajador.getEmpleado()
-                        + "\t" + trabajador.getDni());
-            });
-
+            //Con los Dni con N
+            buscarNEnDni(lista);
+            System.out.println(buscarNEnDni(lista));
             System.out.println();
             //Los que se llaman John
             Boolean personaJonh = buscarJonh(lista);
